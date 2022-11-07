@@ -33,7 +33,7 @@ def calculateGain(attempts, guess, betted):
 def getGuessing(remainingAttempts, level):
     try:
         guessing = int(input(
-            f'\t- Alors mon nombre est : ?\n\t Il vous reste {remainingAttempts} essai(s) !\n'))
+            f'\t- Alors quel nombre ai-je choisie : ?\n\t Il vous reste {remainingAttempts} essai(s) !\n'))
         if guessing not in range(1, (10*level + 1)):
             guessing = int(
                 input(f'\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {10*level} :  ?\n'))
@@ -56,4 +56,9 @@ def validateGuessing(toGuess, guessed):
 
 
 def pursue():
-    return input('\t- Souhaitez-vous continuer la partie (O/N) ?\n').upper()
+    nextStep = input(
+        '\t- Souhaitez-vous continuer la partie (O/N) ?\n').upper()
+    while nextStep != 'O' and nextStep != 'N':
+        print('\t- Je ne comprends pas votre réponse.')
+        nextStep = pursue()
+    return nextStep

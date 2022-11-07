@@ -38,9 +38,6 @@ def game(level, attempts, start, stop):
         print(
             f'\t- Bingo {pseudo}, vous avez gagné en {attempts} coup(s) et vous avez remporté {gain} € !\n')
         nextStep = lib.pursue()
-        while nextStep != 'O' and nextStep != 'N':
-            print('\t- Je ne comprends pas votre réponse.')
-            nextStep = lib.pursue()
         if (nextStep == 'O' and level <= 5):
             level += 1
             print(f'\t- Super ! Vous passez au Level {level}.\n')
