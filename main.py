@@ -38,17 +38,25 @@ def game(level, attempts, start, stop):
         print(
             f'\t- Bingo {pseudo}, vous avez gagné en {attempts} coup(s) et vous avez remporté {gain} € !\n')
         nextStep = lib.pursue()
-        if (nextStep == 'O' and level <= 5):
+        if (nextStep == 'O'):
             level += 1
             print(f'\t- Super ! Vous passez au Level {level}.\n')
             print(
-                f'\t- Rappelez vous, le principe est le même sauf que mon nombre est maintenant entre 1 et {level*10} et\n\t\t vous avez le droit à 5 essais !\n')
+                f'\t- Rappelez vous, le principe est le même sauf que mon nombre est maintenant entre 1 et {level*10} et\n\t\t vous avez le droit à {3+level*2} essais !\n')
             game(level, 3, 1, level*10)
         elif nextStep == 'N':
             print(f'\t- Au revoir ! Vous finissez la partie avec {gain} €.\n ')
     else:
         print(
             f'\t- Vous avez perdu ! Mon nombre était {toGuess} ! Il vous reste {10-betted} €\n')
-
+        nextStep = lib.pursue()
+        if nextStep == 'O':
+            level = 1
+            print(f'\t- Super ! Vous repassez au Level {level}.\n')
+            print(
+                f'\t- Rappelez vous, le principe est le même sauf que mon nombre est de nouveau entre 1 et {level*10} et\n\t\t vous avez le droit à 3 essais !\n')
+            game(level, 3, 1, level*10)
+        elif nextStep == 'N':
+            print(f'\t- Au revoir ! Vous finissez la partie avec {gain} €.\n ')
 
 game(1, 3, 1, 10)
