@@ -21,25 +21,26 @@ def chooseNumber(start, stop):
 def getGuessing(remainingAttempts, level):
     try:
         guessing = int(input(
-            f'\t- Je viens de penser à un nombre entre 1 et 10. Devinez lequel ?\n\t Il vous reste {remainingAttempts} essai(s) !\n'))
+            f'\t- Alors mon nombre est : ?\n\t Il vous reste {remainingAttempts} essai(s) !\n'))
         if guessing not in range(1, (10*level + 1)):
             guessing = int(
                 input(f'\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {10*level} :  ?\n'))
-            getGuessing()
+            getGuessing(remainingAttempts, level)
         return guessing
     except ValueError:
         print(
             (f'\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {10*level} :  ?\n'))
-        getGuessing()
+        getGuessing(remainingAttempts, level)
 
 
 def validateGuessing(toGuess, guessed):
-    if guessed > toGuess:
-        return '\t- Votre nombre est trop grand !\n'
-    elif guessed < toGuess:
-        return '\t- Votre nbre est trop petit !\n'
-    else:
-        return guessed == toGuess
+    if isinstance(toGuess, int) and isinstance(guessed, int):
+        if guessed > toGuess:
+            return '\t- Votre nombre est trop grand !\n'
+        elif guessed < toGuess:
+            return '\t- Votre nbre est trop petit !\n'
+        else:
+            return guessed == toGuess
 
 
 def pursue():
