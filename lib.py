@@ -18,6 +18,18 @@ def chooseNumber(start, stop):
     return random.randint(start, stop)
 
 
+def calculateGain(attempts, guess, betted):
+    if attempts == 3 and guess == True:
+        gain = betted/2
+    elif attempts == 2 and guess == True:
+        gain = betted
+    elif attempts == 1 and guess == True:
+        gain = 2*betted
+    else:
+        gain = 0
+    return gain
+
+
 def getGuessing(remainingAttempts, level):
     try:
         guessing = int(input(

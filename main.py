@@ -18,7 +18,8 @@ def game(level, attempts, start, stop):
     betted = lib.getBetting()
     toGuess = lib.chooseNumber(start, stop)
     print(toGuess)
-    print('\t- Je viens de penser à un nombre entre 1 et 10. Devinez lequel ?\n')
+    print(
+        f'\t- Je viens de penser à un nombre entre 1 et {10*level}. Devinez lequel ?\n')
     guessed = lib.getGuessing(attempts, level)
     guess = lib.validateGuessing(toGuess, guessed)
     print(guess)
@@ -31,14 +32,7 @@ def game(level, attempts, start, stop):
         attempts += 1
 
     # TODO: calculate the gain properly
-    if attempts == 3 and guess == True:
-        gain = betted/2
-    elif attempts == 2 and guess == True:
-        gain = betted
-    elif attempts == 1 and guess == True:
-        gain = 2*betted
-    else:
-        gain = 0
+    gain = lib.calculateGain(attempts, guess, betted)
 
     if guess == True:
         print(
