@@ -15,8 +15,10 @@ print('\t\t- de quitter le jeu.\n')
 print('\t- Dès que vous devinez mon nombre : vous avez le droit de quitter le jeu et de partir avec vos gains OU \n\t\tde continuer le jeu en passant au level supérieur.\n  ')
 
 
-player = databaseLib.addPlayer(pseudo, 10)
-game = databaseLib.addGame(player)
+databaseLib.addPlayer(pseudo, 10)
+playerId = databaseLib.getPlayerId(pseudo)
+databaseLib.addGame(playerId)
+gameId = databaseLib.getGameId(playerId)
 
 
 def game(level, attempts, maxAttempts, start, stop):
@@ -40,19 +42,23 @@ def game(level, attempts, maxAttempts, start, stop):
     gain = lib.calculateGain(attempts, guess, betted)
 
     if guess == True:
-        databaseLib.addRound(game, level, attempts, gain, 1)
+        databaseLib.addRound(betted, playerId, level, attempts, gain, pseudo)
         print(
             f'\t- Bingo {pseudo}, vous avez gagné en {attempts} coup(s) et vous avez remporté {gain} € !\n')
         nextStep = lib.pursue()
         if (nextStep == 'O'):
+            print(
+                f'\tvous avez maintenant {lib.getTotalBalance(gain, betted)} € au total')
             level += 1
             maxAttempts += 2
             lib.pursuing(level, maxAttempts)
             game(level, 3, maxAttempts, 1, level*10)
         elif nextStep == 'N':
-            print(f'\t- Au revoir ! Vous finissez la partie avec {gain} €.\n ')
+            print(
+                f'\t- Au revoir ! Vous finissez la partie avec un de {gain} € \n\tvous avez maintenant {lib.getTotalBalance(gain, betted)} € au total.\n ')
+            databaseLib.showStats(gameId)
     else:
-        databaseLib.addRound(game, level, attempts, gain, 0)
+        databaseLib.addRound(betted, playerId, level, attempts, gain, 0)
         print(
             f'\t- Vous avez perdu ! Mon nombre était {toGuess} ! Il vous reste {10-betted} €\n')
         nextStep = lib.pursue()
@@ -63,6 +69,9 @@ def game(level, attempts, maxAttempts, start, stop):
             game(level, 3, maxAttempts, 1, level*10)
         elif nextStep == 'N':
             print(f'\t- Au revoir ! Vous finissez la partie avec {gain} €.\n ')
+            print(
+                f'\tvous avez donc {lib.getTotalBalance(gain, betted)} € au total')
+            databaseLib.showStats(gameId)
 
 
 game(1, 3, 3, 1, 10)

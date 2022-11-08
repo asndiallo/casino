@@ -25,10 +25,28 @@ def addPlayer(user_pseudo, Balance):
         # Executing the SQL command
         cursor.execute(sql)
 
-        playerId = cursor.lastrowid
-
         # Commit your changes in the database
         connection.commit()
+
+    except:
+        # Rolling back in case of error
+        connection.rollback()
+
+    # Closing the connection
+    connection.close()
+
+
+def getPlayerId(user_pseudo):
+    connection = connectToDatabase()
+    try:
+        # Creating a cursor object using the cursor() method
+        cursor = connection.cursor()
+
+        query = """SELECT Id FROM PLAYERS WHERE Pseudo=(%s)"""
+
+        cursor.execute(query, user_pseudo)
+
+        playerId = cursor.fetchone()[0]
 
         return playerId
 
@@ -53,10 +71,28 @@ def addGame(playerId):
         # Executing the SQL command
         cursor.execute(sql)
 
-        gameId = cursor.lastrowid
-
         # Commit your changes in the database
         connection.commit()
+
+    except:
+        # Rolling back in case of error
+        connection.rollback()
+
+    # Closing the connection
+    connection.close()
+
+
+def getGameId(user_id):
+    connection = connectToDatabase()
+    try:
+        # Creating a cursor object using the cursor() method
+        cursor = connection.cursor()
+
+        query = """SELECT Id FROM GAME WHERE id_user=(%s)"""
+
+        cursor.execute(query, user_id)
+
+        gameId = cursor.fetchone()[0]
 
         return gameId
 
@@ -68,25 +104,71 @@ def addGame(playerId):
     connection.close()
 
 
-def addRound(game, level, attempt, gain, win):
+def addRound(bet, playerId, level, attempt, gain, win):
     connection = connectToDatabase()
     # Creating a cursor object using the cursor() method
     cursor = connection.cursor()
 
+    gameId = getGameId(playerId)
     # Preparing SQL query to INSERT a record into the database.
-    sql = f"""INSERT INTO ROUND(game_id, level, attempt, gain, win)
-    VALUES ('{game}, {level}, {attempt}, {gain}, {win}')"""
-
+    sql = """INSERT INTO ROUND(game_id, level, attempt, bet, gain, win)
+    VALUES (%s, %s, %s, %s, %s, %s)"""
+    value = (gameId, level, attempt, bet, gain, win)
     try:
         # Executing the SQL command
-        cursor.execute(sql)
-
+        cursor.execute(sql, value)
         # Commit your changes in the database
         connection.commit()
+    except:
+        # Rolling back in case of error
+        connection.rollback()
+    # Closing the connection
+    connection.close()
+
+
+def showStats(gameId):
+    connection = connectToDatabase()
+    # Creating a cursor object using the cursor() method
+    cursor = connection.cursor()
+
+    sql = """SELECT
+            MAX(bet) AS MaxBet,     
+            MIN(bet) AS MinBet,
+            AVG(bet) AS AvgBet,
+            MAX(gain) AS MaxGain,
+            MIN(gain) AS MinGain,
+            AVG(gain) AS AvgGain,
+            MAX(attempt) AS MaxAttempt,
+            MIN(attempt) AS MinAttempt,
+            AVG(attempt) AS AvgAttempt
+            FROM ROUND WHERE game_id=(%s)            
+    """
+    cursor.execute(sql, gameId)
+
+    records = cursor.fetchall()
+
+    # Commit your changes in the database
+    connection.commit()
+    try:
+        # Executing the SQL command
+        cursor.execute(sql, gameId)
+
+        records = cursor.fetchall()
+        print("Ci-dessous vos Statisques : \n")
+        for row in records:
+            print("MaxBet", row[0])
+            print("MinBet", row[1])
+            print("AvgBet", row[2])
+            print("MaxGain", row[3])
+            print("MinGain", row[4])
+            print("AvgGain", row[5])
+            print("MaxAttempt", row[6])
+            print("MinAttempt", row[7])
+            print("AvgAttempt", row[8])
+            print("\n")
 
     except:
         # Rolling back in case of error
         connection.rollback()
-
     # Closing the connection
     connection.close()

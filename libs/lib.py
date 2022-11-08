@@ -30,6 +30,10 @@ def calculateGain(attempts, guess, betted):
     return gain
 
 
+def getTotalBalance(gain, betted):
+    return 10-betted+gain
+
+
 def getGuessing(remainingAttempts, level):
     try:
         guessing = int(input(
