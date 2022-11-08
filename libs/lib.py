@@ -64,7 +64,7 @@ def pursue():
     return nextStep
 
 
-def pursuing(level):
+def pursuing(level, maxAttempts):
     print(f'\t- Super ! Vous passez au Level {level}.\n')
     print(
-        f'\t- Rappelez vous, le principe est le même sauf que mon nombre est maintenant entre 1 et {level*10} et\n\t\t vous avez le droit à {3+level*2} essais !\n')
+        f'\t- Rappelez vous, le principe est le même sauf que mon nombre est maintenant entre 1 et {level*10} et\n\t\t vous avez le droit à {maxAttempts} essais !\n')

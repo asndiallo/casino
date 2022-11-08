@@ -1,4 +1,5 @@
-import lib
+from libs import lib
+from libs import databaseLib
 
 pseudo = input('\t- Je suis Python. Quel est votre pseudo ? \n ')
 
@@ -14,19 +15,23 @@ print('\t\t- de quitter le jeu.\n')
 print('\t- Dès que vous devinez mon nombre : vous avez le droit de quitter le jeu et de partir avec vos gains OU \n\t\tde continuer le jeu en passant au level supérieur.\n  ')
 
 
-def game(level, attempts, start, stop):
+player = databaseLib.addPlayer(pseudo, 10)
+game = databaseLib.addGame(player)
+
+
+def game(level, attempts, maxAttempts, start, stop):
     betted = lib.getBetting()
     toGuess = lib.chooseNumber(start, stop)
     print(toGuess)
     print(
         f'\t- Je viens de penser à un nombre entre 1 et {10*level}. Devinez lequel ?\n')
-    guessed = lib.getGuessing(attempts, level)
+    guessed = lib.getGuessing(maxAttempts, level)
     guess = lib.validateGuessing(toGuess, guessed)
     print(guess)
 
     attempts = 1
-    while attempts < 3 and guess != True:
-        guessed = lib.getGuessing(3-attempts, level)
+    while attempts < maxAttempts and guess != True:
+        guessed = lib.getGuessing(maxAttempts-attempts, level)
         guess = lib.validateGuessing(toGuess, guessed)
         print(guess)
         attempts += 1
@@ -35,25 +40,29 @@ def game(level, attempts, start, stop):
     gain = lib.calculateGain(attempts, guess, betted)
 
     if guess == True:
+        databaseLib.addRound(game, level, attempts, gain, 1)
         print(
             f'\t- Bingo {pseudo}, vous avez gagné en {attempts} coup(s) et vous avez remporté {gain} € !\n')
         nextStep = lib.pursue()
         if (nextStep == 'O'):
             level += 1
-            lib.pursuing(level)
-            game(level, 3, 1, level*10)
+            maxAttempts += 2
+            lib.pursuing(level, maxAttempts)
+            game(level, 3, maxAttempts, 1, level*10)
         elif nextStep == 'N':
             print(f'\t- Au revoir ! Vous finissez la partie avec {gain} €.\n ')
     else:
+        databaseLib.addRound(game, level, attempts, gain, 0)
         print(
             f'\t- Vous avez perdu ! Mon nombre était {toGuess} ! Il vous reste {10-betted} €\n')
         nextStep = lib.pursue()
         if nextStep == 'O':
             level = 1
-            lib.pursuing(level)
-            game(level, 3, 1, level*10)
+            maxAttempts = 3
+            lib.pursuing(level, maxAttempts)
+            game(level, 3, maxAttempts, 1, level*10)
         elif nextStep == 'N':
             print(f'\t- Au revoir ! Vous finissez la partie avec {gain} €.\n ')
 
 
-game(1, 3, 1, 10)
+game(1, 3, 3, 1, 10)
