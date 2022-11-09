@@ -19,15 +19,16 @@ def chooseNumber(start, stop):
 
 
 def calculateGain(attempts, guess, betted):
-    if attempts == 3 and guess == True:
-        gain = betted/2
-    elif attempts == 2 and guess == True:
-        gain = betted
-    elif attempts == 1 and guess == True:
-        gain = 2*betted
-    else:
-        gain = 0
-    return gain
+    if isinstance(attempts, int) and isinstance(betted, int):
+        if attempts == 3 and guess == True:
+            gain = betted/2
+        elif attempts == 2 and guess == True:
+            gain = betted
+        elif attempts == 1 and guess == True:
+            gain = 2*betted
+        else:
+            gain = 0
+        return gain
 
 
 def getTotalBalance(gain, betted):

@@ -45,17 +45,23 @@ def game(level, attempts, maxAttempts, start, stop):
         databaseLib.addRound(betted, playerId, level, attempts, gain, pseudo)
         print(
             f'\t- Bingo {pseudo}, vous avez gagné en {attempts} coup(s) et vous avez remporté {gain} € !\n')
-        nextStep = lib.pursue()
-        if (nextStep == 'O'):
+        if level != 3:
+            nextStep = lib.pursue()
+            if (nextStep == 'O'):
+                print(
+                    f'\tvous avez maintenant {lib.getTotalBalance(gain, betted)} € au total')
+                level += 1
+                maxAttempts += 2
+                lib.pursuing(level, maxAttempts)
+                game(level, 3, maxAttempts, 1, level*10)
+            elif nextStep == 'N':
+                print(
+                    f'\t- Au revoir ! Vous finissez la partie avec un de {gain} € \n\tvous avez maintenant {lib.getTotalBalance(gain, betted)} € au total.\n ')
+                databaseLib.showStats(gameId)
+        else:
+            print(f'\t- Au revoir ! Vous finissez la partie avec {gain} €.\n ')
             print(
-                f'\tvous avez maintenant {lib.getTotalBalance(gain, betted)} € au total')
-            level += 1
-            maxAttempts += 2
-            lib.pursuing(level, maxAttempts)
-            game(level, 3, maxAttempts, 1, level*10)
-        elif nextStep == 'N':
-            print(
-                f'\t- Au revoir ! Vous finissez la partie avec un de {gain} € \n\tvous avez maintenant {lib.getTotalBalance(gain, betted)} € au total.\n ')
+                f'\tvous avez donc {lib.getTotalBalance(gain, betted)} € au total')
             databaseLib.showStats(gameId)
     else:
         databaseLib.addRound(betted, playerId, level, attempts, gain, 0)

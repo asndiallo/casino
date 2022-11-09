@@ -154,17 +154,17 @@ def showStats(gameId):
         cursor.execute(sql, gameId)
 
         records = cursor.fetchall()
-        print("Ci-dessous vos Statisques : \n")
+        print("\tCi-dessous vos Statisques : \n")
         for row in records:
-            print("MaxBet", row[0])
-            print("MinBet", row[1])
-            print("AvgBet", row[2])
-            print("MaxGain", row[3])
-            print("MinGain", row[4])
-            print("AvgGain", row[5])
-            print("MaxAttempt", row[6])
-            print("MinAttempt", row[7])
-            print("AvgAttempt", row[8])
+            print("\tMaxBet", row[0], " €")
+            print("\tMinBet", row[1], " €")
+            print("\tAvgBet", row[2], " €")
+            print("\tMaxGain", row[3], " €")
+            print("\tMinGain", row[4], " €")
+            print("\tAvgGain", row[5], " €")
+            print("\tMaxAttempt", row[6])
+            print("\tMinAttempt", row[7])
+            print("\tAvgAttempt", row[8])
             print("\n")
 
     except:
